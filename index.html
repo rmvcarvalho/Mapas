@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="css/leaflet.css">
+        <link rel="stylesheet" href="css/qgis2web.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <link rel="stylesheet" href="css/leaflet-measure.css">
+        <style>
+        #map {
+            width: 1126px;
+            height: 885px;
+        }
+        </style>
+        <title></title>
+    </head>
+    <body>
+        <div id="map">
+        </div>
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet.pattern.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="js/leaflet.wms.js"></script>
+        <script src="js/leaflet-measure.js"></script>
+        <script src="js/proj4.js"></script>
+        <script src="js/proj4leaflet.js"></script>
+        <script src="data/ManchasFlorestais_1.js"></script>
+        <script>
+        var crs = new L.Proj.CRS('EPSG:3763', '+proj=tmerc +lat_0=39.6682583333333 +lon_0=-8.13310833333333 +k=1 +x_0=0 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs', {
+            resolutions: [2800, 1400, 700, 350, 175, 84, 42, 21, 11.2, 5.6, 2.8, 1.4, 0.7, 0.35, 0.14, 0.07],
+        });
+        var map = L.map('map', {
+            crs: crs,
+            continuousWorld: false,
+            worldCopyJump: false, 
+            zoomControl:true, maxZoom:28, minZoom:1
+        }).fitBounds([[40.19916220828127,-7.386238685867372],[40.21603247130034,-7.358345610181295]]);
+        var hash = new L.Hash(map);
+        map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
+        var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
+        var measureControl = new L.Control.Measure({
+            position: 'topleft',
+            primaryLengthUnit: 'meters',
+            secondaryLengthUnit: 'kilometers',
+            primaryAreaUnit: 'sqmeters',
+            secondaryAreaUnit: 'hectares'
+        });
+        measureControl.addTo(map);
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
+        .innerHTML = '';
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
+        .className += ' fas fa-ruler';
+        var bounds_group = new L.featureGroup([]);
+        function setBounds() {
+            map.setMaxBounds(map.getBounds());
+        }
+        map.createPane('pane_Ortos2021RGB_0');
+        map.getPane('pane_Ortos2021RGB_0').style.zIndex = 400;
+        var layer_Ortos2021RGB_0 = L.WMS.layer("https://cartografia.dgterritorio.gov.pt/wms/ortos2021", "Ortos2021-RGB", {
+            pane: 'pane_Ortos2021RGB_0',
+            format: 'image/png',
+            uppercase: true,
+            transparent: true,
+            continuousWorld : true,
+            tiled: true,
+            info_format: 'text/html',
+            opacity: 1,
+            attribution: '',
+        });
+        map.addLayer(layer_Ortos2021RGB_0);
+        function pop_ManchasFlorestais_1(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Drawings</th>\
+                        <td>' + (feature.properties['Drawings'] !== null ? autolinker.link(feature.properties['Drawings'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['AREA'] !== null ? autolinker.link(feature.properties['AREA'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">AREA_ha</th>\
+                        <td>' + (feature.properties['AREA_ha'] !== null ? autolinker.link(feature.properties['AREA_ha'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['ID_AREA'] !== null ? autolinker.link(feature.properties['ID_AREA'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_ManchasFlorestais_1_0(feature) {
+            switch(String(feature.properties['Drawings'])) {
+                case 'Ardida':
+                    return {
+                pane: 'pane_ManchasFlorestais_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(107,107,107,0.5803921568627451)',
+                interactive: true,
+            }
+                    break;
+                case 'Acácias / Mimosas':
+                    return {
+                pane: 'pane_ManchasFlorestais_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(234,253,0,0.592156862745098)',
+                interactive: true,
+            }
+                    break;
+                case 'Canavial/Bambu':
+                    return {
+                pane: 'pane_ManchasFlorestais_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(51,243,44,0.5411764705882353)',
+                interactive: true,
+            }
+                    break;
+                case 'Pinhal / Várias':
+                    return {
+                pane: 'pane_ManchasFlorestais_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(70,129,65,0.5333333333333333)',
+                interactive: true,
+            }
+                    break;
+                case 'Sobreios/Várias':
+                    return {
+                pane: 'pane_ManchasFlorestais_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,127,0,0.5607843137254902)',
+                interactive: true,
+            }
+                    break;
+                case 'Sobreiros':
+                    return {
+                pane: 'pane_ManchasFlorestais_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(162,78,0,0.592156862745098)',
+                interactive: true,
+            }
+                    break;
+                case 'Várias / Eucaliptos':
+                    return {
+                pane: 'pane_ManchasFlorestais_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(166,206,227,0.6235294117647059)',
+                interactive: true,
+            }
+                    break;
+            }
+        }
+        map.createPane('pane_ManchasFlorestais_1');
+        map.getPane('pane_ManchasFlorestais_1').style.zIndex = 401;
+        map.getPane('pane_ManchasFlorestais_1').style['mix-blend-mode'] = 'normal';
+        var layer_ManchasFlorestais_1 = new L.geoJson(json_ManchasFlorestais_1, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_ManchasFlorestais_1',
+            layerName: 'layer_ManchasFlorestais_1',
+            pane: 'pane_ManchasFlorestais_1',
+            onEachFeature: pop_ManchasFlorestais_1,
+            style: style_ManchasFlorestais_1_0,
+        });
+        bounds_group.addLayer(layer_ManchasFlorestais_1);
+        map.addLayer(layer_ManchasFlorestais_1);
+        var baseMaps = {};
+        L.control.layers(baseMaps,{'Manchas Florestais<br /><table><tr><td style="text-align: center;"><img src="legend/ManchasFlorestais_1_Ardida0.png" /></td><td>Ardida</td></tr><tr><td style="text-align: center;"><img src="legend/ManchasFlorestais_1_AcáciasMimosas1.png" /></td><td>Acácias / Mimosas</td></tr><tr><td style="text-align: center;"><img src="legend/ManchasFlorestais_1_CanavialBambu2.png" /></td><td>Canavial/Bambu</td></tr><tr><td style="text-align: center;"><img src="legend/ManchasFlorestais_1_PinhalVárias3.png" /></td><td>Pinhal / Várias</td></tr><tr><td style="text-align: center;"><img src="legend/ManchasFlorestais_1_SobreiosVárias4.png" /></td><td>Sobreios/Várias</td></tr><tr><td style="text-align: center;"><img src="legend/ManchasFlorestais_1_Sobreiros5.png" /></td><td>Sobreiros</td></tr><tr><td style="text-align: center;"><img src="legend/ManchasFlorestais_1_VáriasEucaliptos6.png" /></td><td>Várias / Eucaliptos</td></tr></table>': layer_ManchasFlorestais_1,"Ortos2021-RGB     ": layer_Ortos2021RGB_0,}).addTo(map);
+        setBounds();
+        </script>
+    </body>
+</html>
