@@ -8,7 +8,8 @@
         <meta name="apple-mobile-web-app-capable" content="yes">
         <link rel="stylesheet" href="css/leaflet.css"><link rel="stylesheet" href="css/L.Control.Locate.min.css">
         <link rel="stylesheet" href="css/qgis2web.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
-        <link rel="stylesheet" href="css/leaflet-search.css">
+        <link rel="stylesheet" href="css/MarkerCluster.css">
+        <link rel="stylesheet" href="css/MarkerCluster.Default.css">
         <link rel="stylesheet" href="css/leaflet-measure.css">
         <style>
         html, body, #map {
@@ -36,13 +37,14 @@
         <script src="js/leaflet-measure.js"></script>
         <script src="js/proj4.js"></script>
         <script src="js/proj4leaflet.js"></script>
-        <script src="js/leaflet-search.js"></script>
+        <script src="js/leaflet.markercluster.js"></script>
         <script src="data/CPR_1154_1.js"></script>
         <script src="data/CPR_1166_2.js"></script>
         <script src="data/ManchasFlorestais_3.js"></script>
         <script src="data/DGITALIZACOES_4.js"></script>
         <script src="data/Linhas_GPS_5.js"></script>
         <script src="data/Pontosdeinteresse_6.js"></script>
+        <script src="data/FOTOS_7.js"></script>
         <script>
         var highlightLayer;
         function highlightFeature(e) {
@@ -54,7 +56,7 @@
         });
         var map = L.map('map', {
             crs: crs,
-            continuousWorld: false,
+            continuousWorld: true,
             worldCopyJump: false, 
             zoomControl:true, maxZoom:28, minZoom:1
         }).fitBounds([[40.19263605497913,-7.395238455892535],[40.22024398889859,-7.353746101548572]]);
@@ -110,25 +112,6 @@
                     <tr>\
                         <td colspan="2">' + (feature.properties['Name'] !== null ? autolinker.link(feature.properties['Name'].toLocaleString()) : '') + '</td>\
                     </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['descriptio'] !== null ? autolinker.link(feature.properties['descriptio'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['extrude'] !== null ? autolinker.link(feature.properties['extrude'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['visibility'] !== null ? autolinker.link(feature.properties['visibility'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['drawOrder'] !== null ? autolinker.link(feature.properties['drawOrder'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['icon'] !== null ? autolinker.link(feature.properties['icon'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['Drawings'] !== null ? autolinker.link(feature.properties['Drawings'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
                         <td colspan="2">' + (feature.properties['AREA'] !== null ? autolinker.link(feature.properties['AREA'].toLocaleString()) : '') + '</td>\
                     </tr>\
                 </table>';
@@ -182,39 +165,6 @@
                         <td colspan="2">' + (feature.properties['Name'] !== null ? autolinker.link(feature.properties['Name'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <td colspan="2">' + (feature.properties['descriptio'] !== null ? autolinker.link(feature.properties['descriptio'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['timestamp'] !== null ? autolinker.link(feature.properties['timestamp'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['begin'] !== null ? autolinker.link(feature.properties['begin'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['end'] !== null ? autolinker.link(feature.properties['end'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['altitudeMo'] !== null ? autolinker.link(feature.properties['altitudeMo'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['tessellate'] !== null ? autolinker.link(feature.properties['tessellate'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['extrude'] !== null ? autolinker.link(feature.properties['extrude'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['visibility'] !== null ? autolinker.link(feature.properties['visibility'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['drawOrder'] !== null ? autolinker.link(feature.properties['drawOrder'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['icon'] !== null ? autolinker.link(feature.properties['icon'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['Drawings'] !== null ? autolinker.link(feature.properties['Drawings'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
                         <td colspan="2">' + (feature.properties['AREA'] !== null ? autolinker.link(feature.properties['AREA'].toLocaleString()) : '') + '</td>\
                     </tr>\
                 </table>';
@@ -265,13 +215,13 @@
             });
             var popupContent = '<table>\
                     <tr>\
-                        <td colspan="2"><strong>Tipo</strong><br />' + (feature.properties['Drawings'] !== null ? autolinker.link(feature.properties['Drawings'].toLocaleString()) : '') + '</td>\
+                        <td colspan="2"><strong>TIPO</strong><br />' + (feature.properties['Drawings'] !== null ? autolinker.link(feature.properties['Drawings'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <td colspan="2"><strong>AREA (ha)</strong><br />' + (feature.properties['AREA_ha'] !== null ? autolinker.link(feature.properties['AREA_ha'].toLocaleString()) : '') + '</td>\
+                        <td colspan="2"><strong>AREA (h)a</strong><br />' + (feature.properties['AREA_ha'] !== null ? autolinker.link(feature.properties['AREA_ha'].toLocaleString()) : '') + '</td>\
                     </tr>\
                 </table>';
-            layer.bindPopup(popupContent, {maxHeight: 400});
+            layer.bindPopup(popupContent, {maxHeight: 200});
         }
 
         var pattern_ManchasFlorestais_3_0 = new L.StripePattern({
@@ -296,7 +246,7 @@
                 weight: 1.0, 
                 fill: true,
                 fillOpacity: 1,
-                fillColor: 'rgba(107,107,107,0.5803921568627451)',
+                fillColor: 'rgba(107,107,107,0.70)',
                 interactive: true,
             }
                     break;
@@ -311,7 +261,7 @@
                 weight: 1.0, 
                 fill: true,
                 fillOpacity: 1,
-                fillColor: 'rgba(234,253,0,0.592156862745098)',
+                fillColor: 'rgba(234,253,0,0.6)',
                 interactive: true,
             }
                     break;
@@ -326,7 +276,7 @@
                 weight: 1.0, 
                 fill: true,
                 fillOpacity: 1,
-                fillColor: 'rgba(51,243,44,0.5411764705882353)',
+                fillColor: 'rgba(51,243,44,0.54)',
                 interactive: true,
             }
                     break;
@@ -341,7 +291,7 @@
                 weight: 1.0, 
                 fill: true,
                 fillOpacity: 1,
-                fillColor: 'rgba(70,129,65,0.5333333333333333)',
+                fillColor: 'rgba(70,129,65,0.54)',
                 interactive: true,
             }
                     break;
@@ -356,7 +306,7 @@
                 weight: 1.0, 
                 fill: true,
                 fillOpacity: 1,
-                fillColor: 'rgba(255,127,0,0.5607843137254902)',
+                fillColor: 'rgba(255,127,0,0.56)',
                 interactive: true,
             }
                     break;
@@ -371,7 +321,7 @@
                 weight: 1.0, 
                 fill: true,
                 fillOpacity: 1,
-                fillColor: 'rgba(162,78,0,0.592156862745098)',
+                fillColor: 'rgba(162,78,0,0.6)',
                 interactive: true,
             }
                     break;
@@ -386,7 +336,7 @@
                 weight: 1.0, 
                 fill: true,
                 fillOpacity: 1,
-                fillColor: 'rgba(166,206,227,0.6235294117647059)',
+                fillColor: 'rgba(166,206,227,0.63)',
                 interactive: true,
             }
                     break;
@@ -401,7 +351,7 @@
                 weight: 1.0, 
                 fill: true,
                 fillOpacity: 1,
-                fillColor: 'rgba(178,223,138,0.5254901960784314)',
+                fillColor: 'rgba(178,223,138,0.52)',
                 interactive: true,
             }
                     break;
@@ -431,7 +381,7 @@
                 weight: 1.0, 
                 fill: true,
                 fillOpacity: 1,
-                fillColor: 'rgba(50,141,180,0.4823529411764706)',
+                fillColor: 'rgba(50,141,180,0.5)',
                 interactive: true,
             }
                     break;
@@ -521,7 +471,7 @@
                 dashArray: '',
                 lineCap: 'square',
                 lineJoin: 'bevel',
-                weight: 11.0,
+                weight: 8.0,
                 fillOpacity: 0,
                 interactive: true,
             }
@@ -534,7 +484,7 @@
                 dashArray: '',
                 lineCap: 'square',
                 lineJoin: 'bevel',
-                weight: 23.0,
+                weight: 12.0,
                 fillOpacity: 0,
                 interactive: true,
             }
@@ -547,7 +497,7 @@
                 dashArray: '',
                 lineCap: 'square',
                 lineJoin: 'bevel',
-                weight: 1.0,
+                weight: 3.0,
                 fillOpacity: 0,
                 interactive: true,
             }
@@ -611,9 +561,6 @@
                     <tr>\
                         <td colspan="2">' + (feature.properties['LN_CODE'] !== null ? autolinker.link(feature.properties['LN_CODE'].toLocaleString()) : '') + '</td>\
                     </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['MEDIA'] !== null ? autolinker.link(feature.properties['MEDIA'].toLocaleString()) : '') + '</td>\
-                    </tr>\
                 </table>';
             layer.bindPopup(popupContent, {maxHeight: 400});
         }
@@ -628,7 +575,7 @@
                 dashArray: '',
                 lineCap: 'square',
                 lineJoin: 'bevel',
-                weight: 11.0,
+                weight: 6.0,
                 fillOpacity: 0,
                 interactive: true,
             }
@@ -667,7 +614,7 @@
                 dashArray: '',
                 lineCap: 'square',
                 lineJoin: 'bevel',
-                weight: 1.0,
+                weight: 1.5,
                 fillOpacity: 0,
                 interactive: true,
             }
@@ -693,7 +640,7 @@
                 dashArray: '',
                 lineCap: 'square',
                 lineJoin: 'bevel',
-                weight: 1.0,
+                weight: 3.0,
                 fillOpacity: 0,
                 interactive: true,
             }
@@ -706,7 +653,7 @@
                 dashArray: '',
                 lineCap: 'square',
                 lineJoin: 'bevel',
-                weight: 1.0,
+                weight: 2.0,
                 fillOpacity: 0,
                 interactive: true,
             }
@@ -719,7 +666,7 @@
                 dashArray: '',
                 lineCap: 'square',
                 lineJoin: 'bevel',
-                weight: 1.0,
+                weight: 2.0,
                 fillOpacity: 0,
                 interactive: true,
             }
@@ -780,11 +727,11 @@
                     return {
                 pane: 'pane_Linhas_GPS_5',
                 opacity: 1,
-                color: 'rgba(226,54,31,1.0)',
+                color: 'rgba(201,165,114,1.0)',
                 dashArray: '',
                 lineCap: 'square',
                 lineJoin: 'bevel',
-                weight: 3.0,
+                weight: 1.0,
                 fillOpacity: 0,
                 interactive: true,
             }
@@ -822,11 +769,8 @@
                     <tr>\
                         <td colspan="2">' + (feature.properties['PT_CODE'] !== null ? autolinker.link(feature.properties['PT_CODE'].toLocaleString()) : '') + '</td>\
                     </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['MEDIA'] !== null ? autolinker.link(feature.properties['MEDIA'].toLocaleString()) : '') + '</td>\
-                    </tr>\
                 </table>';
-            layer.bindPopup(popupContent, {maxHeight: 400});
+            layer.bindPopup(popupContent, {maxHeight: 300});
         }
 
         function style_Pontosdeinteresse_6_0(feature) {
@@ -963,6 +907,18 @@
                 interactive: true,
             }
                     break;
+                case 'FOTO':
+                    return {
+                pane: 'pane_Pontosdeinteresse_6',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/camera.svg',
+            iconSize: [15.2, 15.2]
+        }),
+                interactive: true,
+            }
+                    break;
             }
         }
         map.createPane('pane_Pontosdeinteresse_6');
@@ -985,6 +941,59 @@
         });
         bounds_group.addLayer(layer_Pontosdeinteresse_6);
         map.addLayer(layer_Pontosdeinteresse_6);
+        function pop_FOTOS_7(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    if (typeof layer.closePopup == 'function') {
+                        layer.closePopup();
+                    } else {
+                        layer.eachLayer(function(feature){
+                            feature.closePopup()
+                        });
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['filepath'] !== null ? '<img src="images/' + String(feature.properties['filepath']).replace(/[\\\/:]/g, '_').trim() + '" width="Auto" height="300">' : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 500},{maxWidth: 300});
+        }
+
+        function style_FOTOS_7_0() {
+            return {
+                pane: 'pane_FOTOS_7',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/camera.svg',
+            iconSize: [15.2, 15.2]
+        }),
+                interactive: true,
+            }
+        }
+        map.createPane('pane_FOTOS_7');
+        map.getPane('pane_FOTOS_7').style.zIndex = 407;
+        map.getPane('pane_FOTOS_7').style['mix-blend-mode'] = 'normal';
+        var layer_FOTOS_7 = new L.geoJson(json_FOTOS_7, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_FOTOS_7',
+            layerName: 'layer_FOTOS_7',
+            pane: 'pane_FOTOS_7',
+            onEachFeature: pop_FOTOS_7,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.marker(latlng, style_FOTOS_7_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_FOTOS_7);
+        map.addLayer(layer_FOTOS_7);
             var title = new L.Control();
             title.onAdd = function (map) {
                 this._div = L.DomUtil.create('div', 'info');
@@ -996,7 +1005,7 @@
             };
             title.addTo(map);
         var baseMaps = {};
-        L.control.layers(baseMaps,{'Pontos de interesse<br /><table><tr><td style="text-align: center;"><img src="legend/Pontosdeinteresse_6_Poste0.png" /></td><td>Poste</td></tr><tr><td style="text-align: center;"><img src="legend/Pontosdeinteresse_6_POÇO1.png" /></td><td>POÇO</td></tr><tr><td style="text-align: center;"><img src="legend/Pontosdeinteresse_6_PEDRA2.png" /></td><td>PEDRA</td></tr><tr><td style="text-align: center;"><img src="legend/Pontosdeinteresse_6_MINA3.png" /></td><td>MINA</td></tr><tr><td style="text-align: center;"><img src="legend/Pontosdeinteresse_6_MARCO4.png" /></td><td>MARCO</td></tr><tr><td style="text-align: center;"><img src="legend/Pontosdeinteresse_6_MA5.png" /></td><td>MA</td></tr><tr><td style="text-align: center;"><img src="legend/Pontosdeinteresse_6_GEODESICO6.png" /></td><td>GEODESICO</td></tr><tr><td style="text-align: center;"><img src="legend/Pontosdeinteresse_6_Fontanario7.png" /></td><td>Fontanario</td></tr><tr><td style="text-align: center;"><img src="legend/Pontosdeinteresse_6_Cruzeiro8.png" /></td><td>Cruzeiro</td></tr><tr><td style="text-align: center;"><img src="legend/Pontosdeinteresse_6_CAIXASaneamento9.png" /></td><td>CAIXA / Saneamento</td></tr><tr><td style="text-align: center;"><img src="legend/Pontosdeinteresse_6_SANTA10.png" /></td><td>SANTA</td></tr></table>': layer_Pontosdeinteresse_6,'Linhas_GPS<br /><table><tr><td style="text-align: center;"><img src="legend/Linhas_GPS_5_CAMINHO0.png" /></td><td>CAMINHO</td></tr><tr><td style="text-align: center;"><img src="legend/Linhas_GPS_5_Construcao1.png" /></td><td>Construcao</td></tr><tr><td style="text-align: center;"><img src="legend/Linhas_GPS_5_Eira2.png" /></td><td>Eira</td></tr><tr><td style="text-align: center;"><img src="legend/Linhas_GPS_5_Empedrado3.png" /></td><td>Empedrado</td></tr><tr><td style="text-align: center;"><img src="legend/Linhas_GPS_5_GALINHEIROS4.png" /></td><td>GALINHEIROS</td></tr><tr><td style="text-align: center;"><img src="legend/Linhas_GPS_5_Levada5.png" /></td><td>Levada</td></tr><tr><td style="text-align: center;"><img src="legend/Linhas_GPS_5_Muropedra6.png" /></td><td>Muro_pedra</td></tr><tr><td style="text-align: center;"><img src="legend/Linhas_GPS_5_MuroPedra7.png" /></td><td>Muro_Pedra</td></tr><tr><td style="text-align: center;"><img src="legend/Linhas_GPS_5_POCILGA8.png" /></td><td>POCILGA</td></tr><tr><td style="text-align: center;"><img src="legend/Linhas_GPS_5_RampaPedra9.png" /></td><td>RampaPedra</td></tr><tr><td style="text-align: center;"><img src="legend/Linhas_GPS_5_RUINA10.png" /></td><td>RUINA</td></tr><tr><td style="text-align: center;"><img src="legend/Linhas_GPS_5_Tanque11.png" /></td><td>Tanque</td></tr><tr><td style="text-align: center;"><img src="legend/Linhas_GPS_5_12.png" /></td><td></td></tr></table>': layer_Linhas_GPS_5,'DGITALIZACOES<br /><table><tr><td style="text-align: center;"><img src="legend/DGITALIZACOES_4_Caminho0.png" /></td><td>Caminho</td></tr><tr><td style="text-align: center;"><img src="legend/DGITALIZACOES_4_Estrada1.png" /></td><td>Estrada</td></tr><tr><td style="text-align: center;"><img src="legend/DGITALIZACOES_4_SANTA2.png" /></td><td>SANTA</td></tr><tr><td style="text-align: center;"><img src="legend/DGITALIZACOES_4_TANQUES3.png" /></td><td>TANQUES</td></tr><tr><td style="text-align: center;"><img src="legend/DGITALIZACOES_4_4.png" /></td><td></td></tr></table>': layer_DGITALIZACOES_4,'Manchas Florestais<br /><table><tr><td style="text-align: center;"><img src="legend/ManchasFlorestais_3_Ardida0.png" /></td><td>Ardida</td></tr><tr><td style="text-align: center;"><img src="legend/ManchasFlorestais_3_AcáciasMimosas1.png" /></td><td>Acácias / Mimosas</td></tr><tr><td style="text-align: center;"><img src="legend/ManchasFlorestais_3_CanavialBambu2.png" /></td><td>Canavial/Bambu</td></tr><tr><td style="text-align: center;"><img src="legend/ManchasFlorestais_3_PinhalVárias3.png" /></td><td>Pinhal / Várias</td></tr><tr><td style="text-align: center;"><img src="legend/ManchasFlorestais_3_SobreirosVárias4.png" /></td><td>Sobreiros/Várias</td></tr><tr><td style="text-align: center;"><img src="legend/ManchasFlorestais_3_Sobreiros5.png" /></td><td>Sobreiros</td></tr><tr><td style="text-align: center;"><img src="legend/ManchasFlorestais_3_VáriasEucaliptos6.png" /></td><td>Várias / Eucaliptos</td></tr><tr><td style="text-align: center;"><img src="legend/ManchasFlorestais_3_AgriculturaOutras7.png" /></td><td>Agricultura / Outras</td></tr><tr><td style="text-align: center;"><img src="legend/ManchasFlorestais_3_Matorasteiro8.png" /></td><td>Mato rasteiro</td></tr><tr><td style="text-align: center;"><img src="legend/ManchasFlorestais_3_MatoRasteiroOutras9.png" /></td><td>Mato Rasteiro / Outras</td></tr><tr><td style="text-align: center;"><img src="legend/ManchasFlorestais_3_Pedreira10.png" /></td><td>Pedreira</td></tr><tr><td style="text-align: center;"><img src="legend/ManchasFlorestais_3_URBANAAgrícola11.png" /></td><td>URBANA / Agrícola</td></tr><tr><td style="text-align: center;"><img src="legend/ManchasFlorestais_3_12.png" /></td><td></td></tr></table>': layer_ManchasFlorestais_3,'<img src="legend/CPR_1166_2.png" /> CPR_1166': layer_CPR_1166_2,'<img src="legend/CPR_1154_1.png" /> CPR_1154': layer_CPR_1154_1,"Ortos2021-RGB     ": layer_Ortos2021RGB_0,}).addTo(map);
+        L.control.layers(baseMaps,{'<img src="legend/FOTOS_7.png" /> FOTOS': layer_FOTOS_7,'Pontos de interesse<br /><table><tr><td style="text-align: center;"><img src="legend/Pontosdeinteresse_6_Poste0.png" /></td><td>Poste</td></tr><tr><td style="text-align: center;"><img src="legend/Pontosdeinteresse_6_POÇO1.png" /></td><td>POÇO</td></tr><tr><td style="text-align: center;"><img src="legend/Pontosdeinteresse_6_PEDRA2.png" /></td><td>PEDRA</td></tr><tr><td style="text-align: center;"><img src="legend/Pontosdeinteresse_6_MINA3.png" /></td><td>MINA</td></tr><tr><td style="text-align: center;"><img src="legend/Pontosdeinteresse_6_MARCO4.png" /></td><td>MARCO</td></tr><tr><td style="text-align: center;"><img src="legend/Pontosdeinteresse_6_MA5.png" /></td><td>MA</td></tr><tr><td style="text-align: center;"><img src="legend/Pontosdeinteresse_6_GEODESICO6.png" /></td><td>GEODESICO</td></tr><tr><td style="text-align: center;"><img src="legend/Pontosdeinteresse_6_Fontanario7.png" /></td><td>Fontanario</td></tr><tr><td style="text-align: center;"><img src="legend/Pontosdeinteresse_6_Cruzeiro8.png" /></td><td>Cruzeiro</td></tr><tr><td style="text-align: center;"><img src="legend/Pontosdeinteresse_6_CAIXASaneamento9.png" /></td><td>CAIXA / Saneamento</td></tr><tr><td style="text-align: center;"><img src="legend/Pontosdeinteresse_6_SANTA10.png" /></td><td>SANTA</td></tr><tr><td style="text-align: center;"><img src="legend/Pontosdeinteresse_6_FOTO11.png" /></td><td>FOTO</td></tr></table>': layer_Pontosdeinteresse_6,'Linhas_GPS<br /><table><tr><td style="text-align: center;"><img src="legend/Linhas_GPS_5_CAMINHO0.png" /></td><td>CAMINHO</td></tr><tr><td style="text-align: center;"><img src="legend/Linhas_GPS_5_Construcao1.png" /></td><td>Construcao</td></tr><tr><td style="text-align: center;"><img src="legend/Linhas_GPS_5_Eira2.png" /></td><td>Eira</td></tr><tr><td style="text-align: center;"><img src="legend/Linhas_GPS_5_Empedrado3.png" /></td><td>Empedrado</td></tr><tr><td style="text-align: center;"><img src="legend/Linhas_GPS_5_GALINHEIROS4.png" /></td><td>GALINHEIROS</td></tr><tr><td style="text-align: center;"><img src="legend/Linhas_GPS_5_Levada5.png" /></td><td>Levada</td></tr><tr><td style="text-align: center;"><img src="legend/Linhas_GPS_5_Muropedra6.png" /></td><td>Muro_pedra</td></tr><tr><td style="text-align: center;"><img src="legend/Linhas_GPS_5_MuroPedra7.png" /></td><td>Muro_Pedra</td></tr><tr><td style="text-align: center;"><img src="legend/Linhas_GPS_5_POCILGA8.png" /></td><td>POCILGA</td></tr><tr><td style="text-align: center;"><img src="legend/Linhas_GPS_5_RampaPedra9.png" /></td><td>RampaPedra</td></tr><tr><td style="text-align: center;"><img src="legend/Linhas_GPS_5_RUINA10.png" /></td><td>RUINA</td></tr><tr><td style="text-align: center;"><img src="legend/Linhas_GPS_5_Tanque11.png" /></td><td>Tanque</td></tr><tr><td style="text-align: center;"><img src="legend/Linhas_GPS_5_12.png" /></td><td></td></tr></table>': layer_Linhas_GPS_5,'DGITALIZACOES<br /><table><tr><td style="text-align: center;"><img src="legend/DGITALIZACOES_4_Caminho0.png" /></td><td>Caminho</td></tr><tr><td style="text-align: center;"><img src="legend/DGITALIZACOES_4_Estrada1.png" /></td><td>Estrada</td></tr><tr><td style="text-align: center;"><img src="legend/DGITALIZACOES_4_SANTA2.png" /></td><td>SANTA</td></tr><tr><td style="text-align: center;"><img src="legend/DGITALIZACOES_4_TANQUES3.png" /></td><td>TANQUES</td></tr><tr><td style="text-align: center;"><img src="legend/DGITALIZACOES_4_4.png" /></td><td></td></tr></table>': layer_DGITALIZACOES_4,'Manchas Florestais<br /><table><tr><td style="text-align: center;"><img src="legend/ManchasFlorestais_3_Ardida0.png" /></td><td>Ardida</td></tr><tr><td style="text-align: center;"><img src="legend/ManchasFlorestais_3_AcáciasMimosas1.png" /></td><td>Acácias / Mimosas</td></tr><tr><td style="text-align: center;"><img src="legend/ManchasFlorestais_3_CanavialBambu2.png" /></td><td>Canavial/Bambu</td></tr><tr><td style="text-align: center;"><img src="legend/ManchasFlorestais_3_PinhalVárias3.png" /></td><td>Pinhal / Várias</td></tr><tr><td style="text-align: center;"><img src="legend/ManchasFlorestais_3_SobreirosVárias4.png" /></td><td>Sobreiros/Várias</td></tr><tr><td style="text-align: center;"><img src="legend/ManchasFlorestais_3_Sobreiros5.png" /></td><td>Sobreiros</td></tr><tr><td style="text-align: center;"><img src="legend/ManchasFlorestais_3_VáriasEucaliptos6.png" /></td><td>Várias / Eucaliptos</td></tr><tr><td style="text-align: center;"><img src="legend/ManchasFlorestais_3_AgriculturaOutras7.png" /></td><td>Agricultura / Outras</td></tr><tr><td style="text-align: center;"><img src="legend/ManchasFlorestais_3_Matorasteiro8.png" /></td><td>Mato rasteiro</td></tr><tr><td style="text-align: center;"><img src="legend/ManchasFlorestais_3_MatoRasteiroOutras9.png" /></td><td>Mato Rasteiro / Outras</td></tr><tr><td style="text-align: center;"><img src="legend/ManchasFlorestais_3_Pedreira10.png" /></td><td>Pedreira</td></tr><tr><td style="text-align: center;"><img src="legend/ManchasFlorestais_3_URBANAAgrícola11.png" /></td><td>URBANA / Agrícola</td></tr><tr><td style="text-align: center;"><img src="legend/ManchasFlorestais_3_12.png" /></td><td></td></tr></table>': layer_ManchasFlorestais_3,'<img src="legend/CPR_1166_2.png" /> CPR_1166': layer_CPR_1166_2,'<img src="legend/CPR_1154_1.png" /> CPR_1154': layer_CPR_1154_1,"Ortos2021-RGB     ": layer_Ortos2021RGB_0,}).addTo(map);
         setBounds();
         var i = 0;
         layer_ManchasFlorestais_3.eachLayer(function(layer) {
@@ -1011,13 +1020,6 @@
               addLabel(layer, i);
               i++;
         });
-        map.addControl(new L.Control.Search({
-            layer: layer_Pontosdeinteresse_6,
-            initial: false,
-            hideMarkerOnCollapse: true,
-            propertyName: 'PT_CODE'}));
-        document.getElementsByClassName('search-button')[0].className +=
-         ' fa fa-binoculars';
         resetLabels([layer_ManchasFlorestais_3]);
         map.on("zoomend", function(){
             resetLabels([layer_ManchasFlorestais_3]);
